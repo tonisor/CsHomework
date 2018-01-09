@@ -8,33 +8,65 @@ namespace Homework1
 {
     class Program
     {
-        struct Vec2
+        struct Vec3
         {
-            public float x, y;
+            public double x, y, z;
             public override string ToString()
             {
-                return "" + x + "," + y;
+                return "" + x + "," + y + "," + z;
             }
-        }
-        struct Circle
-        {
-            public Vec2 center;
-            public float radius;
-            public override string ToString()
+            public override bool Equals(Object obj)
             {
-                return "" + center + ":" + radius;
+                if (!(obj is Vec3))
+                    return false;
+                return Equals((Vec3)obj);
+            }
+            public bool Equals(Vec3 vec)
+            {
+                return x == vec.x && y == vec.y && z == vec.z;
+            }
+            public override int GetHashCode()
+            {
+                return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
+            }
+            public double this[int key]
+            {
+                get
+                {
+                    if (key == 0)
+                        return x;
+                    else if (key == 1)
+                        return y;
+                    else if (key == 2)
+                        return z;
+                    else
+                        throw new IndexOutOfRangeException();
+                }
+                set
+                {
+                    if (key == 0)
+                        x = value;
+                    else if (key == 1)
+                        y = value;
+                    else if (key == 2)
+                        z = value;
+                    else
+                        throw new IndexOutOfRangeException();
+                }
+            }
+            public static explicit operator double[](Vec3 v)  // explicit byte to digit conversion operator
+            {
+                return new double[] { v.x, v.y, v.z };
             }
         }
         static void Main(string[] args)
         {
-            var circle = new Circle();
-            var point2 = new Vec2();
-            point2.x = point2.y = 3;
-            circle.center = point2;
-
-            var str = circle.ToString();
-
-            Console.WriteLine("{0}", str);
+            var point1 = new Vec3();
+            point1.x = point1.y = point1.z = 3;
+            point1[1] = 1;
+            var str = point1.ToString();
+            var d = (double[])point1;
+            Console.WriteLine("{0}", d[0]);
             Console.ReadKey();
         }
     }
